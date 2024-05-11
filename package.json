@@ -1,0 +1,16 @@
+{
+  "name": "fastify-hello-world",
+  "version": "1.0.0",
+  "description": "Simple REST API with Fastify web framework.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.52.0",
+    "prettier": "^3.1.0",
+    "prettier-eslint": "^16.1.2"
+  }
+}
