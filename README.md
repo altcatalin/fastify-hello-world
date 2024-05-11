@@ -39,3 +39,15 @@ npm install
 ```
 
 (VS Code only) Install VS Code extensions: [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint), [Prettier ESLint](https://marketplace.visualstudio.com/items?itemName=rvest.vs-code-prettier-eslint) and [EditorConfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig).
+
+Run unit tests
+
+```shell
+npm run test
+```
+
+Start web server
+
+```shell
+npm run server
+```
