@@ -39,6 +39,7 @@ jobs:
         uses: commitizen-tools/commitizen-action@0.21.0
         with:
           dry_run: true
+          push: false
 
       - name: Check commits
         run: cz check
