@@ -1,14 +1,25 @@
 name: Main
 
 on:
+  # trigger on push to main branch, except tags
+  push:
+     branches:
+       - main
+     tags-ignore:
+       - '**'
+
+  # trigger on pull request to main branch
   pull_request:
     branches:
       - main
 
 jobs:
-  test:
+  tests:
     name: Run tests
     runs-on: ubuntu-latest
+
+    # only run on pull request
+    if: github.event_name == 'pull_request'
 
     steps:
       - uses: actions/checkout@v4
@@ -24,9 +35,12 @@ jobs:
       - name: Run tests
         run: npm test
 
-  check:
+  commits:
     name: Check commits
     runs-on: ubuntu-latest
+
+    # only run on pull request
+    if: github.event_name == 'pull_request'
 
     steps:
       - name: Checkout
@@ -42,3 +56,27 @@ jobs:
       - name: Check commits
         run: |
           cz check --rev-range origin/main..origin/${{ github.head_ref }}
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+
+    # only run on push to main branch
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    # give permissions to write
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Release
+        uses: googleapis/release-please-action@v4
+        with:
+          # set "Allow GitHub Actions to create and approve pull requests" under repository Settings > Actions > General
+          # https://github.com/googleapis/release-please-action?tab=readme-ov-file#workflow-permissions
+
+          # a PAT is required to trigger workflows on pull requests created by release-please-action
+          # https://github.com/googleapis/release-please-action?tab=readme-ov-file#github-credentials
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+          release-type: node
