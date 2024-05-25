@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  test:
+  tests:
     name: Run tests
     runs-on: ubuntu-latest
 
@@ -24,7 +24,7 @@ jobs:
       - name: Run tests
         run: npm test
 
-  check:
+  commits:
     name: Check commits
     runs-on: ubuntu-latest
 
