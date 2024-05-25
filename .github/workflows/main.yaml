@@ -1,6 +1,14 @@
 name: Main
 
 on:
+  # trigger on push to main branch, except tags
+  push:
+     branches:
+       - main
+     tags-ignore:
+       - '**'
+
+  # trigger on pull request to main branch
   pull_request:
     branches:
       - main
@@ -9,6 +17,9 @@ jobs:
   tests:
     name: Run tests
     runs-on: ubuntu-latest
+
+    # only run on pull request
+    if: github.event_name == 'pull_request'
 
     steps:
       - uses: actions/checkout@v4
@@ -28,6 +39,9 @@ jobs:
     name: Check commits
     runs-on: ubuntu-latest
 
+    # only run on pull request
+    if: github.event_name == 'pull_request'
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -42,3 +56,28 @@ jobs:
       - name: Check commits
         run: |
           cz check --rev-range origin/main..origin/${{ github.head_ref }}
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+
+    # only run on push to main branch
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    # give permissions to write to the repository
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Release
+        uses: googleapis/release-please-action@v4
+        with:
+          # use PAT if there are workflows to be triggered after the release, otherwise, GITHUB_TOKEN is enough
+          # https://github.com/googleapis/release-please-action?tab=readme-ov-file#github-credentials
+          # token: ${{ secrets.GITHUB_TOKEN }}
+
+          # set "Allow GitHub Actions to create and approve pull requests" under repository Settings > Actions > General
+          # https://github.com/googleapis/release-please-action?tab=readme-ov-file#workflow-permissions
+
+          release-type: node
