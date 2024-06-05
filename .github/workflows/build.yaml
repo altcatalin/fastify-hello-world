@@ -1,0 +1,34 @@
+name: Main
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    name: Build Azure image
+    runs-on: ubuntu-latest
+
+    env:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Packer
+        uses: hashicorp/setup-packer@main
+        with:
+          version: latest
+
+      - name: Init Packer
+        run: packer init image.pkr.hcl
+
+      - name: Validate Packer template
+        run: packer validate -var "version=${GITHUB_REF##*/}" image.pkr.hcl
+
+      - name: Build image
+        run: packer build -color=false -on-error=cleanup -var "version=${GITHUB_REF##*/}" image.pkr.hcl

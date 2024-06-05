@@ -80,3 +80,21 @@ packer build \
   -var "version=sha-$(git rev-parse --short HEAD)" \
   image.pkr.hcl
 ```
+
+Create VM
+
+```shell
+az vm create \
+    --resource-group fastify-hello-world \
+    --name fastify-hello-world \
+    --image fastify-hello-world-sha-$(git rev-parse --short HEAD) \
+    --admin-username $USER \
+    --ssh-key-values ~/.ssh/id_ed25519.pub
+
+az vm open-port \
+    --resource-group fastify-hello-world \
+    --name fastify-hello-world \
+    --port 3000
+
+curl $(az vm list-ip-addresses --name fastify-hello-world --resource-group fastify-hello-world --query "[0].virtualMachine.network.publicIpAddresses[0].ipAddress" | jq -r):3000
+```
