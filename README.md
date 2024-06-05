@@ -29,7 +29,7 @@ pre-commit --version
 Set up the git hook scripts.
 
 ```shell
-pre-commit install --install-hooks -t commit-msg
+pre-commit install
 ```
 
 Install dependencies
@@ -50,4 +50,33 @@ Start web server
 
 ```shell
 npm run server
+```
+
+# Build Azure Image
+
+Create resource group
+
+```shell
+az group create -n fastify-hello-world --location germanywestcentral
+```
+
+Create service principal
+
+```shell
+# !!! Save the content of $AZURE_SECRETS in safe place for long-term storage
+AZURE_SECRETS=$(az ad sp create-for-rbac -n "$USER@$(hostname -f)" --role Contributor --scopes /subscriptions/$(az account show --query "{ subscription_id: id }" | jq -r ".subscription_id") --query "{ client_id: appId, client_secret: password, tenant_id: tenant }")
+```
+
+Build image
+
+```shell
+packer init image.pkr.hcl
+
+packer build \
+  -var "subscription_id=$(az account show --query "{ subscription_id: id }" | jq -r ".subscription_id")" \
+  -var "tenant_id=$(echo $AZURE_SECRETS | jq -r ".tenant_id")" \
+  -var "client_id=$(echo $AZURE_SECRETS | jq -r ".client_id")" \
+  -var "client_secret=$(echo $AZURE_SECRETS | jq -r ".client_secret")" \
+  -var "version=sha-$(git rev-parse --short HEAD)" \
+  image.pkr.hcl
 ```
