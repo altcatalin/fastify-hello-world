@@ -1,0 +1,13 @@
+[Unit]
+Description=Fastify Hello World
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/node /opt/fastify-hello-world/src/server.js
+Restart=on-failure
+User=webapp
+Group=webapp
+
+[Install]
+WantedBy=multi-user.target
