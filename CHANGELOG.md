@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/altcatalin/fastify-hello-world/compare/v1.1.0...v1.1.1) (2024-07-25)
+
+
+### Bug Fixes
+
+* install npm dependencies ([#12](https://github.com/altcatalin/fastify-hello-world/issues/12)) ([676f28c](https://github.com/altcatalin/fastify-hello-world/commit/676f28c1d1492d115b18eebec083b15bb8214122))
+
 ## [1.1.0](https://github.com/altcatalin/fastify-hello-world/compare/v1.0.0...v1.1.0) (2024-06-28)
 
 
