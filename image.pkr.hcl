@@ -117,7 +117,7 @@ build {
       "cp -r /tmp/fastify-hello-world /opt",
       "cd /opt/fastify-hello-world",
       "chown -R node:node /opt/fastify-hello-world",
-      "sudo -l node -c 'npm ci --omit=dev'",
+      "su node -c 'npm ci --omit=dev --cache=nope'",
       "cp /tmp/fastify-hello-world.service /etc/systemd/system",
       "systemctl daemon-reload",
       "systemctl enable fastify-hello-world",
