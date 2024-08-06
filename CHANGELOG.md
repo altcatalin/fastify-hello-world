@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/altcatalin/fastify-hello-world/compare/v1.1.1...v1.1.2) (2024-08-06)
+
+
+### Bug Fixes
+
+* look for port in environment variables ([#14](https://github.com/altcatalin/fastify-hello-world/issues/14)) ([249b13e](https://github.com/altcatalin/fastify-hello-world/commit/249b13e04fbaf8ffd41f2ce1d00308466fd18d4d))
+
 ## [1.1.1](https://github.com/altcatalin/fastify-hello-world/compare/v1.1.0...v1.1.1) (2024-07-25)
 
 
